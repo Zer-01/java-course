@@ -6,6 +6,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task5Test {
     @Test
+    void oneDigitTest() {
+        int number = 3;
+
+        boolean result = Task5.isPalindromeDescendant(number);
+
+        assertThat(result)
+            .isEqualTo(false);
+    }
+
+    @Test
     void twoDigitTest() {
         int number = 11;
 

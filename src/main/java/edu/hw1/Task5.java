@@ -10,7 +10,7 @@ public class Task5 {
     public static boolean isPalindromeDescendant(int number) {
 
         int[] numberIntArr = Integer.toString(number).chars().map(c -> c - '0').toArray();
-        if (number < MIN_TWO_DIGIT_POSITIVE_NUM || numberIntArr.length % 2 == 1) {
+        if (number < MIN_TWO_DIGIT_POSITIVE_NUM) {
             return false;
         }
 

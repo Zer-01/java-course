@@ -25,13 +25,12 @@ public class Task5 {
         if (size < 2) {
             return false;
         }
-        int left = 0;
-        int right = size - 1;
-        while (num[left] == num[right] && left <= right) {
-            left++;
-            right--;
+        for (int i = 0; i < size / 2; i++) {
+            if (num[i] != num[size - i - 1]) {
+                return false;
+            }
         }
-        return left > right;
+        return true;
     }
 
     private static int makeDescendant(int[] num, int size) {

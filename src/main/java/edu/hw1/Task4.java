@@ -5,10 +5,6 @@ public class Task4 {
     }
 
     public static String fixString(String origString) {
-        if (origString == null) {
-            throw new NullPointerException();
-        }
-
         char[] charArr = origString.toCharArray();
         char temp;
         for (int i = 0; i < charArr.length - 1; i += 2) {

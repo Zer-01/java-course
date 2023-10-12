@@ -40,4 +40,14 @@ public class Task7Test {
         assertThat(result)
             .isEqualTo(0);
     }
+
+    @Test
+    void leftN42Shift10() {
+        int num = 42; //101010
+
+        int result = Task7.rotateLeft(num, 10);
+
+        assertThat(result)
+            .isEqualTo(42);
+    }
 }

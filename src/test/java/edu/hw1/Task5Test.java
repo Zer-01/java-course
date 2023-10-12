@@ -26,6 +26,25 @@ public class Task5Test {
     }
 
     @Test
+    void threeDigitTest1() {
+        int number = 123; //для чисел с нечетной длиной выполняется проверка оригинала(без поиска потомков)
+        boolean result = Task5.isPalindromeDescendant(number);
+
+        assertThat(result)
+            .isEqualTo(false);
+    }
+    @Test
+    void threeDigitTest2() {
+        int number = 121;
+
+        boolean result = Task5.isPalindromeDescendant(number);
+
+        assertThat(result)
+            .isEqualTo(true);
+    }
+
+
+    @Test
     void manyDigitTest1() {
         int number = 11210330;//11210330->2333->56->11->true
 

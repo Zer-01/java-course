@@ -6,6 +6,7 @@ public class Task8 {
 
     private static final int BOARD_SIDE_SIZE = 8;
     private static final int POSS_MOVES_CNT = 8;
+    private static final int[][] MOVES = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
 
     public static boolean knightBoardCapture(int[][] board) {
         if (board == null) {
@@ -21,14 +22,12 @@ public class Task8 {
         return true;
     }
 
-    @SuppressWarnings("MagicNumber")
     private static boolean isCapture(int[][] board, int x, int y) {
-        int[][] moves = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
         int tmpX;
         int tmpY;
         for (int i = 0; i < POSS_MOVES_CNT; i++) {
-            tmpX = x + moves[i][0];
-            tmpY = y + moves[i][1];
+            tmpX = x + MOVES[i][0];
+            tmpY = y + MOVES[i][1];
             if (tmpX >= 0 && tmpX < BOARD_SIDE_SIZE && tmpY >= 0 && tmpY < BOARD_SIDE_SIZE && board[tmpX][tmpY] == 1) {
                 return true;
             }

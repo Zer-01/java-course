@@ -23,7 +23,6 @@ public class Task1 {
         } catch (IllegalArgumentException e) {
             return -1;
         }
-        //if(seconds >= 60)
         return mins * SECONDS_IN_MINUTE + seconds;
     }
 }

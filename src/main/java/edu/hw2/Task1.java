@@ -4,7 +4,7 @@ public class Task1 {
     private Task1() {
     }
 
-    public static sealed interface Expr {
+    public sealed interface Expr {
         double evaluate();
 
         public record Constant(double num) implements Expr {

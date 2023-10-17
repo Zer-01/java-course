@@ -1,6 +1,8 @@
 package edu.hw2;
 
+import edu.hw2.Task3.Connection;
 import edu.hw2.Task3.ConnectionException;
+import edu.hw2.Task3.ConnectionManager;
 import edu.hw2.Task3.DefaultConnectionManager;
 import edu.hw2.Task3.FaultyConnectionManager;
 import edu.hw2.Task3.PopularCommandExecutor;
@@ -32,5 +34,24 @@ public class Task3Test {
             .isThrownBy(()->{
                 executor.updatePackages();
             });
+    }
+
+    @Test
+    void faultyConnManagerTest() {
+        ConnectionManager manager = new FaultyConnectionManager();
+
+        Connection connection = manager.getConnection();
+
+        assertThat(manager.getActiveConnectionsCount())
+            .isEqualTo(1);
+
+        try {
+            connection.close();
+        } catch (Exception ex) {
+
+        }
+
+        assertThat(manager.getActiveConnectionsCount())
+            .isEqualTo(0);
     }
 }

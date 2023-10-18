@@ -3,7 +3,9 @@ package edu.project1;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class Project1Test {
     @Test
@@ -65,5 +67,31 @@ public class Project1Test {
 
         assertThat(session.isInProgress())
             .isFalse(); //Игра заканчивается до начала при некорректной длине загадонного слова
+    }
+
+    @Test
+    void workTest() {
+        String data = "x\nx\nx\nx\nx\nn\n"; //Ввод 5 неверных букв
+        InputStream is = new ByteArrayInputStream(data.getBytes());
+        System.setIn(is);
+
+        ConsoleHangman hangman = new ConsoleHangman();
+
+        assertDoesNotThrow(()->{
+            hangman.run();
+        });
+    }
+
+    @Test
+    void wrongInputLength() {
+        String data = "x\nx\nx\nyy\nx\nx\nn\n"; //Ввод 5 неверных букв и одной пары букв
+        InputStream is = new ByteArrayInputStream(data.getBytes());
+        System.setIn(is);
+
+        ConsoleHangman hangman = new ConsoleHangman();
+
+        assertDoesNotThrow(()->{
+            hangman.run(); //тест завершается корректно
+        });
     }
 }

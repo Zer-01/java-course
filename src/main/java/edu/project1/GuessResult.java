@@ -13,13 +13,13 @@ public sealed interface GuessResult {
 
     record Defeat(char[] state, int attempt, int maxAttempts) implements GuessResult {
         public @NotNull String message() {
-            return /*"You lost."*/null;
+            return "You lost";
         }
     }
 
     record Win(char[] state, int attempt, int maxAttempts) implements GuessResult {
         public @NotNull String message() {
-            return "You won.";
+            return "You won!";
         }
     }
 
@@ -32,6 +32,12 @@ public sealed interface GuessResult {
     record FailedGuess(char[] state, int attempt, int maxAttempts) implements GuessResult {
         public @NotNull String message() {
             return "Wrong!";
+        }
+    }
+
+    record GiveUp(char[] state, int attempt, int maxAttempts) implements GuessResult {
+        public @NotNull String message() {
+            return "You gave up";
         }
     }
 }

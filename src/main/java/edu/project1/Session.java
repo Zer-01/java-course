@@ -34,10 +34,19 @@ public class Session {
             }
         } else {
             attempts++;
-            result = (attempts < maxAttempts) ? new GuessResult.FailedGuess(userAnswer, attempts, maxAttempts)
-                                              : new GuessResult.Defeat(userAnswer, attempts, maxAttempts);
+            if (attempts < maxAttempts) {
+                result = new GuessResult.FailedGuess(userAnswer, attempts, maxAttempts);
+            } else {
+                result = new GuessResult.Defeat(userAnswer, attempts, maxAttempts);
+                inProgress = false;
+            }
         }
         return result;
+    }
+
+    public @NotNull GuessResult giveUp() {
+        inProgress = false;
+        return new GuessResult.GiveUp(userAnswer, attempts, maxAttempts);
     }
 
     private boolean isAnswerRight(char letter) {

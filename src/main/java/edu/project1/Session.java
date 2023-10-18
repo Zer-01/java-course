@@ -16,6 +16,9 @@ public class Session {
         this.maxAttempts = maxAttempts;
         this.userAnswer = new char[answer.length()];
         Arrays.fill(userAnswer, '*');
+        if (answer.length() < 2) {
+            inProgress = false;
+        }
     }
 
     public boolean isInProgress() {

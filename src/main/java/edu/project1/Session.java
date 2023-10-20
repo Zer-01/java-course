@@ -30,17 +30,17 @@ public class Session {
         if (isAnswerRight(letter)) {
             modifyAnswer(letter);
             if (openedLetters < answer.length()) {
-                result = new GuessResult.SuccessfulGuess(userAnswer, attempts, maxAttempts);
+                result = new SuccessfulGuess(userAnswer, attempts, maxAttempts);
             } else {
                 inProgress = false;
-                result = new GuessResult.Win(userAnswer, attempts, maxAttempts);
+                result = new Win(userAnswer, attempts, maxAttempts);
             }
         } else {
             attempts++;
             if (attempts < maxAttempts) {
-                result = new GuessResult.FailedGuess(userAnswer, attempts, maxAttempts);
+                result = new FailedGuess(userAnswer, attempts, maxAttempts);
             } else {
-                result = new GuessResult.Defeat(userAnswer, attempts, maxAttempts);
+                result = new Defeat(userAnswer, attempts, maxAttempts);
                 inProgress = false;
             }
         }
@@ -49,7 +49,7 @@ public class Session {
 
     public @NotNull GuessResult giveUp() {
         inProgress = false;
-        return new GuessResult.GiveUp(userAnswer, attempts, maxAttempts);
+        return new GiveUp(userAnswer, attempts, maxAttempts);
     }
 
     private boolean isAnswerRight(char letter) {

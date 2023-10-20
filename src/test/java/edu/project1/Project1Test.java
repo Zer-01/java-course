@@ -16,7 +16,7 @@ public class Project1Test {
         result = session.guess('e'); //неудачная попытка 1
         result = session.guess('f'); //неудачная попытка 2
 
-        assertThat(result instanceof GuessResult.Defeat)
+        assertThat(result instanceof Defeat)
             .isTrue();
     }
 
@@ -29,7 +29,7 @@ public class Project1Test {
         result = session.guess('b'); //удачная попытка 2
         result = session.guess('c'); //удачная попытка 3
 
-        assertThat(result instanceof GuessResult.Win)
+        assertThat(result instanceof Win)
             .isTrue();
         assertThat(new String(result.state()).equals("abc"))
             .isTrue();
@@ -42,7 +42,7 @@ public class Project1Test {
 
         result = session.guess('a');
 
-        assertThat(result instanceof GuessResult.SuccessfulGuess)
+        assertThat(result instanceof SuccessfulGuess)
             .isTrue();
         assertThat(new String(result.state()).equals("a***"))
             .isTrue();
@@ -55,7 +55,7 @@ public class Project1Test {
 
         result = session.guess('t');
 
-        assertThat(result instanceof GuessResult.FailedGuess)
+        assertThat(result instanceof FailedGuess)
             .isTrue();
         assertThat(new String(result.state()).equals("****"))
             .isTrue();

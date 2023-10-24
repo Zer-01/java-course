@@ -1,6 +1,8 @@
 package edu.project1;
 
 import java.util.Arrays;
+
+import edu.project1.GuessResults.*;
 import org.jetbrains.annotations.NotNull;
 
 public class Session {

@@ -1,6 +1,7 @@
 package edu.project1;
 
 import java.util.Scanner;
+import edu.project1.GuessResults.GuessResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +37,7 @@ public class ConsoleHangman {
     private void printState(GuessResult guess) {
         LOGGER.info(guess.message());
         LOGGER.info(
-            "Mistake " + Integer.toString(guess.attempt()) + " out of " + Integer.toString(guess.maxAttempts()));
+            "Mistake " + guess.attempt() + " out of " + guess.maxAttempts());
         LOGGER.info("The word: " + new String(guess.state()));
         LOGGER.info("=================================================");
     }

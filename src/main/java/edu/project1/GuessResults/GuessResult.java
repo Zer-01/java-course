@@ -1,4 +1,4 @@
-package edu.project1;
+package edu.project1.GuessResults;
 
 import org.jetbrains.annotations.NotNull;
 

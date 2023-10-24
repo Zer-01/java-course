@@ -1,5 +1,6 @@
 package edu.project1;
 
+import edu.project1.GuessResults.*;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

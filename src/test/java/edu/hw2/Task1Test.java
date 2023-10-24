@@ -1,6 +1,6 @@
 package edu.hw2;
 
-import static edu.hw2.Task1.Expr.*;
+import edu.hw2.Task1.*;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class Task1Test {

@@ -1,8 +1,12 @@
 package edu.project1;
 
+import edu.project1.GuessResults.Defeat;
+import edu.project1.GuessResults.FailedGuess;
+import edu.project1.GuessResults.GiveUp;
+import edu.project1.GuessResults.GuessResult;
+import edu.project1.GuessResults.SuccessfulGuess;
+import edu.project1.GuessResults.Win;
 import java.util.Arrays;
-
-import edu.project1.GuessResults.*;
 import org.jetbrains.annotations.NotNull;
 
 public class Session {

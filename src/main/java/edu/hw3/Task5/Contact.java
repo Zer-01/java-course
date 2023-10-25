@@ -19,14 +19,6 @@ public class Contact implements Comparable<Contact> {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getSurName() {
-        return surname;
-    }
-
     @Override
     public String toString() {
         return (surname == null) ? name : name + " " + surname;

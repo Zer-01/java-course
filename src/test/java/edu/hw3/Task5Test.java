@@ -13,33 +13,40 @@ public class Task5Test {
     @Test
     void ASCTest() {
         String[] input = {"John Locke", "Thomas Aquinas", "David Hume", "Rene Descartes"};
-        String expectedResult = "[Thomas Aquinas, Rene Descartes, David Hume, John Locke]";
+        Contact[] expectedResult = {new Contact("Thomas Aquinas"),
+                                    new Contact("Rene Descartes"),
+                                    new Contact("David Hume"),
+                                    new Contact("John Locke")};
 
         Contact[] result = ContactParser.parseContacts(input, "ASC");
 
-        assertThat(Arrays.toString(result))
+        assertThat(result)
             .isEqualTo(expectedResult);
     }
 
     @Test
     void DESCTest() {
         String[] input = {"Paul Erdos", "Leonhard Euler", "Carl Gauss"};
-        String expectedResult = "[Carl Gauss, Leonhard Euler, Paul Erdos]";
+        Contact[] expectedResult = {new Contact("Carl Gauss"),
+                                    new Contact("Leonhard Euler"),
+                                    new Contact("Paul Erdos")};
 
         Contact[] result = ContactParser.parseContacts(input, "DESC");
 
-        assertThat(Arrays.toString(result))
+        assertThat(result)
             .isEqualTo(expectedResult);
     }
 
     @Test
     void sortWithNameTest() {
         String[] input = {"Paul Erdos", "Leonhard", "Carl Gauss"};
-        String expectedResult = "[Paul Erdos, Carl Gauss, Leonhard]";
+        Contact[] expectedResult = {new Contact("Paul Erdos"),
+                                    new Contact("Carl Gauss"),
+                                    new Contact("Leonhard")};
 
         Contact[] result = ContactParser.parseContacts(input, "ASC");
 
-        assertThat(Arrays.toString(result))
+        assertThat(result)
             .isEqualTo(expectedResult);
     }
 

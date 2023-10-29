@@ -1,5 +1,6 @@
 package edu.hw3.Task5;
 
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 public class Contact implements Comparable<Contact> {
@@ -29,5 +30,27 @@ public class Contact implements Comparable<Contact> {
         String compString1 = (surname == null) ? name : surname;
         String compString2 = (contact.surname == null) ? contact.name : contact.surname;
         return compString1.compareTo(compString2);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Contact guest = (Contact) obj;
+        return Objects.equals(name, guest.name) && Objects.equals(surname, guest.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        final int hashBase = 31;
+        int result = hashBase;
+        result = result * hashBase + ((name == null) ? 0 : name.hashCode());
+        result = result * hashBase + ((surname == null) ? 0 : surname.hashCode());
+        return result;
     }
 }

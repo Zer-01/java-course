@@ -74,4 +74,33 @@ public class Tasks {
             .filter(o -> o.age() != o.paws())
             .toList();
     }
+
+    public static List<Animal> canBiteAndHigher100(List<Animal> list) { //Task11
+        return list.stream()
+            .filter(o->o.bites()&&o.height()>100)
+            .toList();
+    }
+
+    public static Integer weightMoreThanHeightCount(List<Animal> list) { //Task12
+        return (int)list.stream()
+            .filter(o->o.weight()>o.height())
+            .count();
+    }
+
+    public static List<Animal> moreThanTwoWordNames(List<Animal> list) { //Task13
+        return list.stream()
+            .filter(a->a.name().split(" ").length>2)
+            .toList();
+    }
+
+    public static Boolean isThereADogHigherK(List<Animal> list, int k) { //Task14
+        return list.stream()
+            .anyMatch(o->o.type()== Animal.Type.DOG&&o.height()>k);
+    }
+
+    public static Integer KToIAgeAnimalsWeightSum(List<Animal> list, int k, int i) { //Task15
+        return list.stream()
+            .filter(o->o.age()>=k&&o.age()<=i)
+            .mapToInt(Animal::weight).sum();
+    }
 }

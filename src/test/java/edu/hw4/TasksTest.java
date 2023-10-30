@@ -1,16 +1,16 @@
 package edu.hw4;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import static org.assertj.core.api.Assertions.as;
+import java.util.Set;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 
 public class TasksTest {
     private static List<Animal> inList;
@@ -18,12 +18,14 @@ public class TasksTest {
     @BeforeAll
     public static void init() {
         Animal an0 = new Animal("Whisker word2 word3", Animal.Type.CAT, Animal.Sex.M, 3, 12,
-            9, true);
+            9, true
+        );
         Animal an1 = new Animal("Fluffy", Animal.Type.CAT, Animal.Sex.F, 2, 15, 7, true);
         Animal an2 = new Animal("Buddy", Animal.Type.DOG, Animal.Sex.M, 4, 110, 30, true);
         Animal an3 = new Animal("Luna", Animal.Type.DOG, Animal.Sex.F, 3, 90, 28, true);
         Animal an4 = new Animal("Polly word2 word3", Animal.Type.BIRD, Animal.Sex.F, 5, 4,
-            6, false);
+            6, false
+        );
         Animal an5 = new Animal("Kiwi", Animal.Type.BIRD, Animal.Sex.M, 2, 3, 5, false);
         Animal an6 = new Animal("Nemo", Animal.Type.FISH, Animal.Sex.M, 1, 2, 3, false);
         Animal an7 = new Animal("Dory", Animal.Type.FISH, Animal.Sex.F, 1, 3, 4, false);
@@ -168,11 +170,11 @@ public class TasksTest {
 
     @Test
     void moreThanTwoWordNamesTest() { //Task13Test
-        var expResult = Arrays.asList( inList.get(4), inList.get(0));
+        var expResult = Arrays.asList(inList.get(4), inList.get(0));
         var result = Tasks.moreThanTwoWordNames(inList);
 
-            assertThat(result)
-                .containsExactlyInAnyOrderElementsOf(expResult);
+        assertThat(result)
+            .containsExactlyInAnyOrderElementsOf(expResult);
     }
 
     @Test
@@ -193,9 +195,87 @@ public class TasksTest {
 
     @Test
     void KToIAgeAnimalsWeightSumTest() { //Task15Test
-        Integer result = Tasks.KToIAgeAnimalsWeightSum(inList, 2, 4);
+        Integer result = Tasks.kToIAgeAnimalsWeightSum(inList, 2, 4);
 
         assertThat(result)
             .isEqualTo(81);
+    }
+
+    @Test
+    void sortedByTypeSexNameTest() { //Task16Test
+        var expResult = new ArrayList<>(inList);
+        expResult.sort(Comparator.comparing(Animal::type)
+            .thenComparing(Animal::sex)
+            .thenComparing(Animal::name));
+
+        var result = Tasks.sortedByTypeSexName(inList);
+
+        assertThat(result)
+            .isEqualTo(expResult);
+    }
+
+    @Test
+    void spidersBiteMoreOftenThanDogsTest() { //Task17Test
+        var result = Tasks.spidersBiteMoreOftenThanDogs(inList);
+
+        assertThat(result)
+            .isFalse();
+    }
+
+    @Test
+    void spidersBiteMoreOftenThanDogsNotEnoughDataTest() { //Task17Test
+        var testList = Arrays.asList(inList.get(8));
+        var result = Tasks.spidersBiteMoreOftenThanDogs(testList);
+
+        assertThat(result)
+            .isFalse();
+    }
+
+    @Test
+    void heaviestFishSearchTest() { //Task18Test
+        Animal testFish = new Animal("Test Fish", Animal.Type.FISH, Animal.Sex.F, 1, 3, 10,
+            false
+        );
+        var inList2 = new ArrayList<>(inList);
+        inList2.add(testFish);
+
+        var result = Tasks.getHeaviestFish(inList, inList2);
+
+        assertThat(result)
+            .isEqualTo(testFish);
+    }
+
+    @Test
+    void validateAnimalsTest() { //Task19Test
+        List<Animal> input = Arrays.asList(
+            new Animal("Dory", Animal.Type.FISH, Animal.Sex.F, -1, 3, 4, false),
+            new Animal("Fang", Animal.Type.SPIDER, Animal.Sex.M, 2, 1, 2, true),
+            new Animal("Spi", Animal.Type.SPIDER, Animal.Sex.M, 1, 1, 0, false)
+        );
+        Map<String, Set<ValidationError>> expResult = new HashMap<>();
+        expResult.put(input.get(0).name(), AnimalValidator.validateAnimal(input.get(0)));
+        expResult.put(input.get(2).name(), AnimalValidator.validateAnimal(input.get(2)));
+
+        var result = Tasks.validateAnimals(input);
+
+        assertThat(result)
+            .containsExactlyInAnyOrderEntriesOf(expResult);
+    }
+
+    @Test
+    void friendlyValidateAnimalsTest() { //Task20Test
+        List<Animal> input = Arrays.asList(
+            new Animal("Dory", Animal.Type.FISH, Animal.Sex.F, -1, -1, 4, false),
+            new Animal("Fang", Animal.Type.SPIDER, Animal.Sex.M, 2, 1, 2, true),
+            new Animal("Spi", Animal.Type.SPIDER, Animal.Sex.M, 1, 1, 0, false)
+        );
+        Map<String, String> expResult = new HashMap<>();
+        expResult.put("Dory", "age, height");
+        expResult.put("Spi", "weight");
+
+        var result = Tasks.friendlyValidateAnimals(input);
+
+        assertThat(result)
+            .containsExactlyInAnyOrderEntriesOf(expResult);
     }
 }

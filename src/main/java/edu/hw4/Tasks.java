@@ -3,6 +3,8 @@ package edu.hw4;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 public class Tasks {
@@ -23,7 +25,7 @@ public class Tasks {
 
     public static Map<Animal.Type, Integer> getTypesCount(List<Animal> list) { //Task3
         return list.stream()
-            .collect(Collectors.toMap(Animal::type, o->1, Math::addExact));
+            .collect(Collectors.toMap(Animal::type, o -> 1, Math::addExact));
     }
 
     public static Animal getLongestName(List<Animal> list) { //Task4
@@ -40,5 +42,36 @@ public class Tasks {
             .get().getKey();
     }
 
+    public static Map<Animal.Type, Animal> heaviestAnimalOfEveryType(List<Animal> list) { //Task6
+        return list.stream()
+            .collect(Collectors.toMap(
+                Animal::type, a -> a,
+                BinaryOperator.maxBy(Comparator.comparingInt(Animal::weight))
+            ));
+    }
 
+    public static Animal getKOldestAnimal(List<Animal> list, int k) { //Task7
+        return list.stream()
+            .sorted(Comparator.comparingInt(Animal::age).reversed())
+            .skip(k - 1)
+            .findFirst()
+            .orElse(null);
+    }
+
+    public static Optional<Animal> getHeaviestBelowK(List<Animal> list, int k) { //Task8
+        return list.stream()
+            .filter(a -> a.height() < k)
+            .max(Comparator.comparingInt(Animal::weight));
+    }
+
+    public static Integer getPawsCount(List<Animal> list) { //Task9
+        return list.stream()
+            .mapToInt(Animal::paws).sum();
+    }
+
+    public static List<Animal> ageNotEqualPawsCount(List<Animal> list) { //Task10
+        return list.stream()
+            .filter(o -> o.age() != o.paws())
+            .toList();
+    }
 }

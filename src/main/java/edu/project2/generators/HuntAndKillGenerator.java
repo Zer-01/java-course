@@ -6,12 +6,17 @@ import edu.project2.Maze;
 import java.util.Random;
 
 public class HuntAndKillGenerator implements Generator {
+    private final static int MINIMAL_SIDE_SIZE = 4;
     private final static int[][] POSSIBLE_MOVES = {
         {0, 1, 0, -1},  //x
         {1, 0, -1, 0}}; //y
     private final Random rand = new Random();
 
+    @Override
     public Maze generate(int height, int width) {
+        if (height < MINIMAL_SIDE_SIZE || width < MINIMAL_SIDE_SIZE) {
+            throw new IllegalArgumentException();
+        }
         Cell[][] grid = new Cell[height][width];
         fillGrid(grid);
         createMaze(grid);
@@ -93,6 +98,6 @@ public class HuntAndKillGenerator implements Generator {
             yPos = (yPos + 1) % grid.length;
         }
         grid[yPos][grid[0].length - 1] = Cell.PASSAGE;
-        return new Coordinate(0, yPos);
+        return new Coordinate(grid[0].length - 1, yPos);
     }
 }

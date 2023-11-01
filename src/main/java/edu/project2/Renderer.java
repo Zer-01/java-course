@@ -30,6 +30,9 @@ public class Renderer {
     }
 
     public static String render(Maze maze, List<Coordinate> path) {
+        if (path == null) {
+            return render(maze);
+        }
         StringBuilder strB = new StringBuilder(maze.height() * maze.width() * CELL_WIDTH);
         Cell[][] mazeGrid = maze.grid();
 

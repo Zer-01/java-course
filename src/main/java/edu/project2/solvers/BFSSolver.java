@@ -20,23 +20,23 @@ public class BFSSolver implements Solver {
     @Override
     public List<Coordinate> solve(Maze maze) {
         this.maze = maze;
-        this.gridCache=maze.grid();
-        Map<Coordinate, Coordinate> pathLog  = new HashMap<>();
-        if(BFSStart(pathLog)) {
+        this.gridCache = maze.grid();
+        Map<Coordinate, Coordinate> pathLog = new HashMap<>();
+        if (bfsStart(pathLog)) {
             return getAnswer(pathLog);
         } else {
             return null;
         }
     }
 
-    private boolean BFSStart(Map<Coordinate, Coordinate> pathLog) {
+    private boolean bfsStart(Map<Coordinate, Coordinate> pathLog) {
         Queue<Coordinate> queue = new LinkedList<>();
         queue.add(maze.start());
         Coordinate tempCoord;
 
         while (!queue.isEmpty()) {
             tempCoord = queue.poll();
-            if(tempCoord.equals(maze.end())) {
+            if (tempCoord.equals(maze.end())) {
                 return true;
             }
             for (int i = 0; i < POSSIBLE_MOVES[0].length; i++) {
@@ -44,7 +44,7 @@ public class BFSSolver implements Solver {
                     tempCoord.x() + POSSIBLE_MOVES[0][i],
                     tempCoord.y() + POSSIBLE_MOVES[1][i]
                 );
-                if(!outOfBounds(nextCoord) && isPassage(nextCoord) && !pathLog.containsKey(nextCoord)) {
+                if (!outOfBounds(nextCoord) && isPassage(nextCoord) && !pathLog.containsKey(nextCoord)) {
                     pathLog.put(nextCoord, tempCoord);
                     queue.add(nextCoord);
                 }
@@ -59,7 +59,7 @@ public class BFSSolver implements Solver {
         Coordinate coordinate = pathLog.get(maze.end());
         while (!coordinate.equals(maze.start())) {
             answer.add(coordinate);
-            coordinate=pathLog.get(coordinate);
+            coordinate = pathLog.get(coordinate);
         }
         answer.add(coordinate);
         return answer;
@@ -70,7 +70,7 @@ public class BFSSolver implements Solver {
     }
 
     private boolean outOfBounds(Coordinate coord) {
-        return coord.x() < 0 || coord.x() > gridCache[0].length - 1 || coord.y() < 0 ||
-            coord.y() > gridCache.length - 1;
+        return coord.x() < 0 || coord.x() > gridCache[0].length - 1 || coord.y() < 0
+            || coord.y() > gridCache.length - 1;
     }
 }

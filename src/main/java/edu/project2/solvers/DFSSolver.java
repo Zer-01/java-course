@@ -20,14 +20,14 @@ public class DFSSolver implements Solver {
         this.maze = maze;
         gridCache = maze.grid();
         answerSells = new HashSet<>();
-        if(DFSStep(maze.start())) {
+        if (dfsStep(maze.start())) {
             return answerSells.stream().toList();
         } else {
             return null;
         }
     }
 
-    private boolean DFSStep(Coordinate coordinate) {
+    private boolean dfsStep(Coordinate coordinate) {
         if (outOfBounds(coordinate) || !isPassage(coordinate) || answerSells.contains(coordinate)) {
             return false;
         }
@@ -37,11 +37,11 @@ public class DFSSolver implements Solver {
             return true;
         } else {
             for (int i = 0; i < POSSIBLE_MOVES[0].length; i++) {
-                boolean result = DFSStep(new Coordinate(
+                boolean result = dfsStep(new Coordinate(
                     coordinate.x() + POSSIBLE_MOVES[0][i],
                     coordinate.y() + POSSIBLE_MOVES[1][i]
                 ));
-                if(result) {
+                if (result) {
                     return true;
                 }
             }
@@ -55,7 +55,7 @@ public class DFSSolver implements Solver {
     }
 
     private boolean outOfBounds(Coordinate coord) {
-        return coord.x() < 0 || coord.x() > gridCache[0].length - 1 || coord.y() < 0 ||
-            coord.y() > gridCache.length - 1;
+        return coord.x() < 0 || coord.x() > gridCache[0].length - 1 || coord.y() < 0
+            || coord.y() > gridCache.length - 1;
     }
 }

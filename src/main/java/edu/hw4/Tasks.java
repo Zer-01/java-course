@@ -46,7 +46,7 @@ public class Tasks {
             .collect(Collectors.groupingBy(Animal::sex, Collectors.counting()))
             .entrySet().stream()
             .max((o1, o2) -> (int) (o1.getValue() - o2.getValue()))
-            .get().getKey();
+            .map(Map.Entry::getKey).orElse(null);
     }
 
     public static Map<Animal.Type, Animal> heaviestAnimalOfEveryType(List<Animal> list) { //Task6

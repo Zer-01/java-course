@@ -28,12 +28,12 @@ public class Tasks {
 
     public static Map<Animal.Type, Integer> getTypesCount(List<Animal> list) { //Task3
         return list.stream()
-            .collect(Collectors.toMap(Animal::type, o -> 1, Math::addExact));
+            .collect(Collectors.toMap(Animal::type, count -> 1, Math::addExact));
     }
 
     public static Animal getLongestName(List<Animal> list) { //Task4
         return list.stream()
-            .max(Comparator.comparingInt(o -> o.name().length()))
+            .max(Comparator.comparingInt(animal -> animal.name().length()))
             .orElse(null);
     }
 
@@ -45,14 +45,14 @@ public class Tasks {
         return list.stream()
             .collect(Collectors.groupingBy(Animal::sex, Collectors.counting()))
             .entrySet().stream()
-            .max((o1, o2) -> (int) (o1.getValue() - o2.getValue()))
+            .max((count1, count2) -> (int) (count1.getValue() - count2.getValue()))
             .map(Map.Entry::getKey).orElse(null);
     }
 
     public static Map<Animal.Type, Animal> heaviestAnimalOfEveryType(List<Animal> list) { //Task6
         return list.stream()
             .collect(Collectors.toMap(
-                Animal::type, a -> a,
+                Animal::type, animal -> animal,
                 BinaryOperator.maxBy(Comparator.comparingInt(Animal::weight))
             ));
     }
@@ -67,7 +67,7 @@ public class Tasks {
 
     public static Optional<Animal> getHeaviestBelowK(List<Animal> list, int k) { //Task8
         return list.stream()
-            .filter(a -> a.height() < k)
+            .filter(animal -> animal.height() < k)
             .max(Comparator.comparingInt(Animal::weight));
     }
 
@@ -78,36 +78,36 @@ public class Tasks {
 
     public static List<Animal> ageNotEqualPawsCount(List<Animal> list) { //Task10
         return list.stream()
-            .filter(o -> o.age() != o.paws())
+            .filter(animal -> animal.age() != animal.paws())
             .toList();
     }
 
     public static List<Animal> canBiteAndHigher100(List<Animal> list) { //Task11
         return list.stream()
-            .filter(o -> o.bites() && o.height() > TASK11_HEIGHT)
+            .filter(animal -> animal.bites() && animal.height() > TASK11_HEIGHT)
             .toList();
     }
 
     public static Integer weightMoreThanHeightCount(List<Animal> list) { //Task12
         return (int) list.stream()
-            .filter(o -> o.weight() > o.height())
+            .filter(animal -> animal.weight() > animal.height())
             .count();
     }
 
     public static List<Animal> moreThanTwoWordNames(List<Animal> list) { //Task13
         return list.stream()
-            .filter(a -> a.name().split(" ").length > 2)
+            .filter(animal -> animal.name().split(" ").length > 2)
             .toList();
     }
 
     public static Boolean isThereADogHigherK(List<Animal> list, int k) { //Task14
         return list.stream()
-            .anyMatch(o -> o.type() == Animal.Type.DOG && o.height() > k);
+            .anyMatch(animal -> animal.type() == Animal.Type.DOG && animal.height() > k);
     }
 
     public static Integer kToIAgeAnimalsWeightSum(List<Animal> list, int k, int i) { //Task15
         return list.stream()
-            .filter(o -> o.age() >= k && o.age() <= i)
+            .filter(animal -> animal.age() >= k && animal.age() <= i)
             .mapToInt(Animal::weight).sum();
     }
 
@@ -124,10 +124,10 @@ public class Tasks {
         boolean isSpiderExist = list.stream().anyMatch(a -> a.type() == Animal.Type.SPIDER);
 
         long biteDogCount = list.stream()
-            .filter(a -> a.type() == Animal.Type.DOG && a.bites())
+            .filter(animal -> animal.type() == Animal.Type.DOG && animal.bites())
             .count();
         long biteSpiderCount = list.stream()
-            .filter(a -> a.type() == Animal.Type.SPIDER && a.bites())
+            .filter(animal -> animal.type() == Animal.Type.SPIDER && animal.bites())
             .count();
         return isDogExist && isSpiderExist && biteSpiderCount > biteDogCount;
     }
@@ -136,7 +136,7 @@ public class Tasks {
         Animal result = null;
         for (List<Animal> list : lists) {
             Optional<Animal> tmp = list.stream()
-                .filter(a -> a.type() == Animal.Type.FISH)
+                .filter(animal -> animal.type() == Animal.Type.FISH)
                 .max(Comparator.comparingInt(Animal::weight));
             if (tmp.isPresent() && (result == null || tmp.get().weight() > result.weight())) {
                 result = tmp.get();
@@ -156,7 +156,7 @@ public class Tasks {
             .filter(AnimalValidator::isError)
             .collect(Collectors.toMap(
                 Animal::name,
-                a -> AnimalValidator.validateAnimal(a).stream()
+                animal -> AnimalValidator.validateAnimal(animal).stream()
                     .map(ValidationError::field)
                     .collect(Collectors.joining(", "))
             ));

@@ -195,10 +195,16 @@ public class TasksTest {
 
     @Test
     void KToIAgeAnimalsWeightSumTest() { //Task15Test
-        Integer result = Tasks.kToIAgeAnimalsWeightSum(inList, 2, 4);
+        Map<Animal.Type, Integer> expResult = new HashMap<>();
+        expResult.put(Animal.Type.CAT, 16);
+        expResult.put(Animal.Type.DOG, 58);
+        expResult.put(Animal.Type.BIRD, 5);
+        expResult.put(Animal.Type.SPIDER, 2);
+
+        var result = Tasks.kToIAgeAnimalsWeightSum(inList, 2, 4);
 
         assertThat(result)
-            .isEqualTo(81);
+            .containsExactlyInAnyOrderEntriesOf(expResult);
     }
 
     @Test

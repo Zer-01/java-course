@@ -105,10 +105,13 @@ public class Tasks {
             .anyMatch(animal -> animal.type() == Animal.Type.DOG && animal.height() > k);
     }
 
-    public static Integer kToIAgeAnimalsWeightSum(List<Animal> list, int k, int i) { //Task15
+    public static Map<Animal.Type, Integer> kToIAgeAnimalsWeightSum(List<Animal> list, int k, int i) { //Task15
         return list.stream()
             .filter(animal -> animal.age() >= k && animal.age() <= i)
-            .mapToInt(Animal::weight).sum();
+            .collect(Collectors.toMap(
+                Animal::type, Animal::weight,
+                Math::addExact
+            ));
     }
 
     public static List<Animal> sortedByTypeSexName(List<Animal> list) { //Task16

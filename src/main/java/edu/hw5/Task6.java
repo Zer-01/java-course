@@ -7,8 +7,12 @@ public class Task6 {
     private Task6() {
     }
 
-    public static boolean isSubstring(String s, String t) {
-        Pattern pattern = Pattern.compile(s);
+    public static boolean isSubSequence(String s, String t) {
+        StringBuilder newS = new StringBuilder(".*");
+        for (char ch : s.toCharArray()) {
+            newS.append(ch).append(".*");
+        }
+        Pattern pattern = Pattern.compile(newS.toString());
         Matcher matcher = pattern.matcher(t);
         return matcher.find();
     }

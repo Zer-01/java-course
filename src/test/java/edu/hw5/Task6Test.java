@@ -8,24 +8,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class Task6Test {
-    static Arguments[] substrings() {
+    static Arguments[] subSequences() {
         return new Arguments[] {
             Arguments.of("abc", "achfdbaabgabcaabg"),
             Arguments.of("abc", "abcabcabc"),
-            Arguments.of("", "abc")
+            Arguments.of("", "abc"),
+            Arguments.of("abc", "afbfc")
         };
     }
 
     @ParameterizedTest
-    @MethodSource("substrings")
+    @MethodSource("subSequences")
     void substringTest(String s, String t) {
-        boolean result = Task6.isSubstring(s, t);
+        boolean result = Task6.isSubSequence(s, t);
 
         assertThat(result)
             .isTrue();
     }
 
-    static Arguments[] notSubstrings() {
+    static Arguments[] notSubSequences() {
         return new Arguments[] {
             Arguments.of("abc", "achfdbaabgaabg"),
             Arguments.of("a", "")
@@ -33,9 +34,9 @@ public class Task6Test {
     }
 
     @ParameterizedTest
-    @MethodSource("notSubstrings")
+    @MethodSource("notSubSequences")
     void notSubstringTest(String s, String t) {
-        boolean result = Task6.isSubstring(s, t);
+        boolean result = Task6.isSubSequence(s, t);
 
         assertThat(result)
             .isFalse();
@@ -45,12 +46,12 @@ public class Task6Test {
     void nullInputTest() {
         assertThatExceptionOfType(NullPointerException.class)
             .isThrownBy(()->{
-                Task6.isSubstring(null, "aa");
+                Task6.isSubSequence(null, "aa");
             });
 
         assertThatExceptionOfType(NullPointerException.class)
             .isThrownBy(()->{
-                Task6.isSubstring("aa", null);
+                Task6.isSubSequence("aa", null);
             });
     }
 }

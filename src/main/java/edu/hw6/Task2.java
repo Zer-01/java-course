@@ -1,9 +1,9 @@
 package edu.hw6;
 
-import org.apache.logging.log4j.LogManager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.apache.logging.log4j.LogManager;
 
 public class Task2 {
     private Task2() {

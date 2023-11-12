@@ -6,18 +6,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Task1Test {
+    static Path tmpFile;
+
+    @BeforeAll
+    public static void init() throws IOException {
+        tmpFile = Files.createTempFile("Tsk1Tst", null);
+    }
+
     @Test
     void addTest() {
-        Path tmpFile = null;
-        try {
-            tmpFile = Files.createTempFile("Tsk1Tst", null);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         Map<String, String> testMap = new HashMap<>();
         testMap.put("Key1", "Val1");
         testMap.put("Key2", "Val2");
@@ -35,12 +37,6 @@ public class Task1Test {
 
     @Test
     void removeTest() {
-        Path tmpFile = null;
-        try {
-            tmpFile = Files.createTempFile("Tsk1Tst", null);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         Map<String, String> testMap = new HashMap<>();
         testMap.put("Key1", "Val1");
         testMap.put("Key2", "Val2");

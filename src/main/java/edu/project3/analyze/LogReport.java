@@ -1,4 +1,4 @@
-package edu.project3;
+package edu.project3.analyze;
 
 import java.util.List;
 import java.util.Map;

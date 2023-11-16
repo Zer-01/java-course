@@ -1,4 +1,4 @@
-package edu.project3;
+package edu.project3.logsParse;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;

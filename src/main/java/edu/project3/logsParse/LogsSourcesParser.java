@@ -1,4 +1,4 @@
-package edu.project3;
+package edu.project3.logsParse;
 
 import java.io.IOException;
 import java.net.URI;

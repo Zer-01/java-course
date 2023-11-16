@@ -1,5 +1,7 @@
-package edu.project3;
+package edu.project3.analyze;
 
+import edu.project3.arguments.ArgumentContainer;
+import edu.project3.logsParse.LogParser;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -1,5 +1,7 @@
 package edu.project3;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,12 +16,13 @@ import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RawLogParser {
+public class LogsSourceParser {
     private final static String PATH_ERROR = "Wrong path";
     private final static String PATH_FORMAT_ERROR = "Wrong path format";
     private static final Pattern UNKNOWN_FILE_PATTERN = Pattern.compile("(?<path>[^*]*)\\\\(?<fNamePart>[^*]*)\\*");
@@ -31,23 +34,23 @@ public class RawLogParser {
         return List.of(true);
     }
 
-    private static List<Boolean> parseUnknownFile(String string) {
+    private static List<LogRecord> parseUnknownFile(String string) {
         Matcher matcher = UNKNOWN_FILE_PATTERN.matcher(string);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(PATH_FORMAT_ERROR);
         }
         Path path = Paths.get(matcher.group("path"));
         String fileNamePart = matcher.group("fNamePart");
-
+        List<LogRecord> logList = new ArrayList<>();
         try {
-            Files.newDirectoryStream(path, fileNamePart + "*.txt").forEach(System.out::println);
+            Files.newDirectoryStream(path, fileNamePart + "*.txt").forEach(file -> parseFile(file, logList));
         } catch (IOException e) {
             throw new IllegalArgumentException(PATH_ERROR, e);
         }
-        return List.of(false);
+        return logList;
     }
 
-    private static List<Boolean> parseUnknownPath(String string) {
+    private static List<LogRecord> parseUnknownPath(String string) {
         Matcher matcher = UNKNOWN_PATH_PATTERN.matcher(string);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(PATH_FORMAT_ERROR);
@@ -56,12 +59,13 @@ public class RawLogParser {
         String fileName = matcher.group("fName");
         PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/" + fileName);
 
+        List<LogRecord> logList = new ArrayList<>();
         try {
             Files.walkFileTree(pathPart, Set.of(), 2, new SimpleFileVisitor<>() {
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (pathMatcher.matches(file)) {
-                        System.out.println(file);
+                        parseFile(file, logList);
                     }
                     return FileVisitResult.CONTINUE;
                 }
@@ -69,10 +73,11 @@ public class RawLogParser {
         } catch (IOException e) {
             throw new IllegalArgumentException(PATH_ERROR, e);
         }
-        return List.of(false);
+        return logList;
     }
 
-    private static List<Boolean> parseLink(String link) {
+    private static List<LogRecord> parseLink(String link) {
+        List<LogRecord> logList = new ArrayList<>();
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
@@ -80,7 +85,7 @@ public class RawLogParser {
                 .GET()
                 .build();
         } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("Wrong link", e);
+            throw new IllegalArgumentException("Invalid link", e);
         }
 
         String stringResponse;
@@ -89,13 +94,26 @@ public class RawLogParser {
                 .send(request, HttpResponse.BodyHandlers.ofString());
             stringResponse = response.body();
         } catch (IOException | InterruptedException e) {
-            throw new IllegalArgumentException("Wrong link or connection", e);
+            throw new IllegalArgumentException("Invalid link or bad connection", e);
         }
 
         String[] linesStrings = stringResponse.split("\\r?\\n");
         for (String line : linesStrings) {
-            System.out.println(line);
+            logList.add(LogParser.parseLog(line));
         }
-        return List.of(true);
+        return logList;
+    }
+
+    private static void parseFile(Path file, List<LogRecord> list) {
+        String tmpString;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file.toString()))) {
+            tmpString = reader.readLine();
+            while (!tmpString.isEmpty()) {
+                list.add(LogParser.parseLog(tmpString));
+                tmpString = reader.readLine();
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Parse file error", e);
+        }
     }
 }

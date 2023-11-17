@@ -6,7 +6,6 @@ import edu.project3.arguments.ArgumentContainer;
 import edu.project3.arguments.ArgumentParser;
 import edu.project3.logsParse.LogsSourcesParser;
 import edu.project3.output.Printer;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +18,7 @@ public class Main {
     private Main() {
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String[] arguments = {"--path", "https://raw.githubusercontent.com/"
             + "elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs", "--format", "markdown"};
 

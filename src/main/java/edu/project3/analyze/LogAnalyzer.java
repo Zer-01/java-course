@@ -21,6 +21,7 @@ public class LogAnalyzer {
     private final Map<String, Integer> remoteAdrCount;
     private final Map<String, Integer> userAgentCount;
     private ArgumentContainer arguments;
+    private boolean isAnalyzed = false;
 
     public LogAnalyzer() {
         requestsCount = 0;
@@ -64,12 +65,19 @@ public class LogAnalyzer {
                 throw new RuntimeException(e);
             }
         }
+        if (requestsCount == 0) {
+            throw new IllegalArgumentException("No logs");
+        }
         avgRespSize /= requestsCount;
         arguments = args;
+        isAnalyzed = true;
         return this;
     }
 
     public LogReport getReport(int maxTableRows) {
+        if (!isAnalyzed) {
+            return null;
+        }
         return new LogReport(
             arguments,
             fileNames,

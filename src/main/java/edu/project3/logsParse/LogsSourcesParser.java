@@ -88,7 +88,7 @@ public class LogsSourcesParser {
         return List.of(tmpFile);
     }
 
-    public static int getEndOfFileParent(String pathStr) {
+    private static int getEndOfFileParent(String pathStr) {
         int firstAsterPos = pathStr.indexOf('*');
         if (firstAsterPos == -1) {
             firstAsterPos = pathStr.length() - 1;

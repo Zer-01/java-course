@@ -1,9 +1,9 @@
 package edu.project3.output;
 
 import edu.project3.analyze.LogReport;
-import edu.project3.arguments.ArgumentContainer;
 import java.time.OffsetDateTime;
 
+@SuppressWarnings("MultipleStringLiterals")
 public class MarkdownRenderer implements StatRenderer {
     private final LogReport report;
 
@@ -13,11 +13,11 @@ public class MarkdownRenderer implements StatRenderer {
 
     @Override
     public String render() {
-        return generalInfoTable() +
-            resourceTable() +
-            renderRespCodeTable() +
-            remoteAddressTable() +
-            userAgentTable();
+        return generalInfoTable()
+            + resourceTable()
+            + responseCodeTable()
+            + remoteAddressTable()
+            + userAgentTable();
     }
 
     private String generalInfoTable() {
@@ -40,7 +40,7 @@ public class MarkdownRenderer implements StatRenderer {
 
     private String resourceTable() {
         StringBuilder result = new StringBuilder();
-        result.append("####  \nЗапрашиваемые ресурсы\n\n")
+        result.append("\n####  Запрашиваемые ресурсы\n\n")
             .append("|   Ресурс    | Количество |\n")
             .append("|:-----------:|-----------:|\n");
         for (var res : report.reqResourcesCount()) {
@@ -49,14 +49,14 @@ public class MarkdownRenderer implements StatRenderer {
         return result.toString();
     }
 
-    private String renderRespCodeTable() {
+    private String responseCodeTable() {
         StringBuilder result = new StringBuilder();
         result.append("\n#### Коды ответа\n\n")
             .append("| Код |        Имя        | Количество |\n")
             .append("|:---:|:-----------------:|-----------:|\n");
         for (var code : report.respCodesCount()) {
             result.append("| ")
-                .append(code.getKey()).append(" | ").append(statusCodeNames.get(code.getKey()))
+                .append(code.getKey()).append(" | ").append(STATUS_CODE_NAMES.get(code.getKey()))
                 .append(" | ").append(code.getValue()).append(" |\n");
         }
         return result.toString();

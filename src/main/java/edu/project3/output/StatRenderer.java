@@ -4,7 +4,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 public interface StatRenderer {
-    Map<String, String> statusCodeNames = Map.<String, String>ofEntries(
+    Map<String, String> STATUS_CODE_NAMES = Map.<String, String>ofEntries(
         entry("101", "Switching Protocols"),
         entry("102", "Processing"),
         entry("103", "Early Hints"),

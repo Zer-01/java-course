@@ -32,7 +32,7 @@ public class LogAnalyzer {
         userAgentCount = new HashMap<>();
     }
 
-    public void analyze(List<Path> paths, ArgumentContainer args) {
+    public LogAnalyzer analyze(List<Path> paths, ArgumentContainer args) {
         for (Path path : paths) {
             fileNames.add(path.getFileName().toString());
             try (Stream<String> linesStream = Files.lines(path)) {
@@ -64,8 +64,9 @@ public class LogAnalyzer {
                 throw new RuntimeException(e);
             }
         }
-        avgRespSize += requestsCount;
+        avgRespSize /= requestsCount;
         arguments = args;
+        return this;
     }
 
     public LogReport getReport(int maxTableRows) {

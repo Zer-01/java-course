@@ -28,7 +28,7 @@ public class AdocRenderer implements StatRenderer {
             .append("|===\n")
             .append("|Метрика|Значение\n")
             .append("|Файл(-ы)|").append(report.fileNames().get(0)).append("\n");
-        for (int i = 2; i < report.fileNames().size(); i++) {
+        for (int i = 1; i < report.fileNames().size(); i++) {
             result.append("| | ").append(report.fileNames().get(i)).append("\n");
         }
         result.append("|Начальная дата|  ").append((from != null) ? from.toLocalDate() : " ").append("\n")

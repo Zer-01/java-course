@@ -11,7 +11,7 @@ public class ArgumentParser {
     }
 
     public static ArgumentContainer parse(String[] args) {
-        if (args.length == 0) {
+        if (args.length == 0 || args.length % 2 != 0) {
             throw new IllegalArgumentException("Not enough parameters");
         }
 
@@ -26,10 +26,10 @@ public class ArgumentParser {
                     path = args[i + 1];
                     break;
                 case "--from":
-                    from = tryParseDate(args[i + 1]);
+                    from = tryParseDate(args[i + 1]).atStartOfDay().atOffset(ZoneOffset.UTC);
                     break;
                 case "--to":
-                    to = tryParseDate(args[i + 1]);
+                    to = tryParseDate(args[i + 1]).atTime(23, 59, 59).atOffset(ZoneOffset.UTC);
                     break;
                 case "--format":
                     format = tryParseFormat(args[i + 1]);
@@ -46,14 +46,14 @@ public class ArgumentParser {
         return new ArgumentContainer(path, from, to, format);
     }
 
-    private static OffsetDateTime tryParseDate(String string) {
+    private static LocalDate tryParseDate(String string) {
         LocalDate date;
         try {
             date = LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
         } catch (DateTimeParseException ein) {
             throw new IllegalArgumentException("Invalid date format", ein);
         }
-        return date.atStartOfDay().atOffset(ZoneOffset.UTC);
+        return date;
     }
 
     private static PrintFormat tryParseFormat(String string) {

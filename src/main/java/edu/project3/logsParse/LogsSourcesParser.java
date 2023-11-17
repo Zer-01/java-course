@@ -7,79 +7,42 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LogsSourcesParser {
-    private final static String PATH_ERROR = "Wrong path";
-    private final static String PATH_FORMAT_ERROR = "Wrong path format";
-    private static final Pattern UNKNOWN_FILE_PATTERN = Pattern.compile("(?<path>[^*]*)\\\\(?<fNamePart>[^*]*)\\*");
-    private static final Pattern UNKNOWN_PATH_PATTERN =
-        Pattern.compile("(?<pathPart>.*)\\\\\\*\\*\\\\(?<fName>[^*]*\\.[^*]*)");
-    private static final Pattern LINK_PATTERN = Pattern.compile("https?://.*");
-
     private LogsSourcesParser() {
     }
 
     public static List<Path> parse(ArgumentContainer container) {
-        List<Path> result;
-        if (container.file().matches(UNKNOWN_FILE_PATTERN.toString())) {
-            result = parseUnknownFile(container.file());
-        } else if (container.file().matches(UNKNOWN_PATH_PATTERN.toString())) {
-            result = parseUnknownPath(container.file());
-        } else if (container.file().matches(LINK_PATTERN.toString())) {
-            result = parseLink(container.file());
+        String pathStr = container.file();
+        if (pathStr.indexOf("https://") == 0) {
+            return parseLink(pathStr);
         } else {
-            Path tmpPath = Paths.get(container.file());
-            if (Files.exists(tmpPath)) {
-                result = List.of(tmpPath);
-            } else {
-                throw new IllegalArgumentException("Invalid file path");
-            }
+            return parsePath(pathStr);
         }
-        return result;
     }
 
-    private static List<Path> parseUnknownFile(String string) {
-        Matcher matcher = UNKNOWN_FILE_PATTERN.matcher(string);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException(PATH_FORMAT_ERROR);
-        }
-        Path path = Paths.get(matcher.group("path"));
-        String fileNamePart = matcher.group("fNamePart");
-        List<Path> pathList = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(path, fileNamePart + "*.txt")) {
-            stream.forEach(pathList::add);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(PATH_ERROR, e);
-        }
-        return pathList;
-    }
+    private static List<Path> parsePath(String pathStr) {
+        int lastParentIndex = getEndOfFileParent(pathStr);
+        String globPattern = "glob:**/"
+            + pathStr.substring(lastParentIndex + 1).replaceAll("\\\\", "/")
+            + (pathStr.contains(".txt") ? "" : ".txt");
 
-    private static List<Path> parseUnknownPath(String string) {
-        Matcher matcher = UNKNOWN_PATH_PATTERN.matcher(string);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException(PATH_FORMAT_ERROR);
-        }
-        Path pathPart = Paths.get(matcher.group("pathPart"));
-        String fileName = matcher.group("fName");
-        PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/" + fileName);
+        PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher(globPattern);
+        Path pathParent = Path.of(pathStr.substring(0, lastParentIndex + 1));
 
         List<Path> pathList = new ArrayList<>();
         try {
-            Files.walkFileTree(pathPart, Set.of(), 2, new SimpleFileVisitor<>() {
+            Files.walkFileTree(pathParent, new SimpleFileVisitor<>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     if (pathMatcher.matches(file)) {
@@ -89,7 +52,7 @@ public class LogsSourcesParser {
                 }
             });
         } catch (IOException e) {
-            throw new IllegalArgumentException(PATH_ERROR, e);
+            throw new IllegalArgumentException("Illegal file path", e);
         }
         return pathList;
     }
@@ -100,6 +63,7 @@ public class LogsSourcesParser {
             request = HttpRequest.newBuilder()
                 .uri(new URI(link))
                 .GET()
+                .timeout(Duration.ofSeconds(10))
                 .build();
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid link", e);
@@ -119,8 +83,16 @@ public class LogsSourcesParser {
             tmpFile = Files.createTempFile("Logs", null);
             Files.writeString(tmpFile, stringResponse);
         } catch (IOException e) {
-            throw new RuntimeException("Error creating temp file", e);
+            throw new RuntimeException("Creating temp file error", e);
         }
         return List.of(tmpFile);
+    }
+
+    public static int getEndOfFileParent(String pathStr) {
+        int firstAsterPos = pathStr.indexOf('*');
+        if (firstAsterPos == -1) {
+            firstAsterPos = pathStr.length() - 1;
+        }
+        return pathStr.lastIndexOf('\\', firstAsterPos);
     }
 }

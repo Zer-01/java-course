@@ -1,5 +1,6 @@
 package edu.project3.logsParse;
 
+import edu.project3.arguments.ArgumentContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,14 +30,19 @@ public class LogsSourcesParser {
         Pattern.compile("(?<pathPart>.*)\\\\\\*\\*\\\\(?<fName>[^*]*\\.[^*]*)");
     private static final Pattern LINK_PATTERN = Pattern.compile("https?://.*");
 
-    public List<Path> parse(String path) {
+    private LogsSourcesParser() {
+    }
+
+    public static List<Path> parse(ArgumentContainer container) {
         List<Path> result;
-        if (path.matches(UNKNOWN_FILE_PATTERN.toString())) {
-            result = parseUnknownFile(path);
-        } else if (path.matches(UNKNOWN_PATH_PATTERN.toString())) {
-            result = parseUnknownPath(path);
+        if (container.file().matches(UNKNOWN_FILE_PATTERN.toString())) {
+            result = parseUnknownFile(container.file());
+        } else if (container.file().matches(UNKNOWN_PATH_PATTERN.toString())) {
+            result = parseUnknownPath(container.file());
+        } else if (container.file().matches(LINK_PATTERN.toString())) {
+            result = parseLink(container.file());
         } else {
-            Path tmpPath = Paths.get(path);
+            Path tmpPath = Paths.get(container.file());
             if (Files.exists(tmpPath)) {
                 result = List.of(tmpPath);
             } else {
@@ -100,8 +106,8 @@ public class LogsSourcesParser {
         }
 
         String stringResponse;
-        try (HttpClient client = HttpClient.newHttpClient()) {
-            var response = client
+        try {
+            var response = HttpClient.newHttpClient()
                 .send(request, HttpResponse.BodyHandlers.ofString());
             stringResponse = response.body();
         } catch (IOException | InterruptedException e) {
@@ -111,7 +117,7 @@ public class LogsSourcesParser {
         Path tmpFile;
         try {
             tmpFile = Files.createTempFile("Logs", null);
-            Files.write(tmpFile, stringResponse.getBytes());
+            Files.writeString(tmpFile, stringResponse);
         } catch (IOException e) {
             throw new RuntimeException("Error creating temp file", e);
         }

@@ -1,6 +1,7 @@
 package edu.project3.arguments;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -49,15 +50,11 @@ public class ArgumentParser {
     private static OffsetDateTime tryParseDate(String string) {
         LocalDate date;
         try {
-            date = LocalDate.parse(string, DateTimeFormatter.ISO_DATE_TIME);
-        } catch (DateTimeParseException e) {
-            try {
-                date = LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
-            } catch (DateTimeParseException ein) {
-                throw new IllegalArgumentException("Invalid date format", ein);
-            }
+            date = LocalDate.parse(string, DateTimeFormatter.ISO_DATE);
+        } catch (DateTimeParseException ein) {
+            throw new IllegalArgumentException("Invalid date format", ein);
         }
-        return date.atStartOfDay().atOffset(ZoneOffset.ofHours(0));
+        return date.atStartOfDay().atOffset(ZoneOffset.UTC);
     }
 
     private static ArgumentContainer.PrintFormat tryParseFormat(String string) {

@@ -1,9 +1,11 @@
 package edu.project3.analyze;
 
+import edu.project3.arguments.ArgumentContainer;
 import java.util.List;
 import java.util.Map;
 
 public record LogReport(
+    ArgumentContainer arguments,
     List<String> fileNames,
     long logsCount,
     long avgRespSize,

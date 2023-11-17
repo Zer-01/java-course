@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class LogAnalyzer {
     private final Map<String, Integer> respCodesCount;
     private final Map<String, Integer> remoteAdrCount;
     private final Map<String, Integer> userAgentCount;
+    private ArgumentContainer arguments;
 
     public LogAnalyzer() {
         requestsCount = 0;
@@ -36,8 +38,8 @@ public class LogAnalyzer {
             try (Stream<String> linesStream = Files.lines(path)) {
                 linesStream
                     .map(LogParser::parseLog)
-                    .filter(log -> log.time().isAfter(args.from()))
-                    .filter(log -> log.time().isBefore(args.to()))
+                    .filter(log -> args.from() == null || log.time().isAfter(args.from()))
+                    .filter(log -> args.to() == null || log.time().isBefore(args.to()))
                     .forEach(logRecord -> {
                         requestsCount++;
                         avgRespSize += logRecord.responseSize();
@@ -63,10 +65,12 @@ public class LogAnalyzer {
             }
         }
         avgRespSize += requestsCount;
+        arguments = args;
     }
 
     public LogReport getReport(int maxTableRows) {
         return new LogReport(
+            arguments,
             fileNames,
             requestsCount,
             avgRespSize,
@@ -79,7 +83,7 @@ public class LogAnalyzer {
 
     private List<Map.Entry<String, Integer>> sortMap(Map<String, Integer> map, int maxTableRows) {
         return map.entrySet().stream()
-            .sorted(Map.Entry.comparingByValue())
+            .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
             .limit(maxTableRows)
             .toList();
     }

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class LogParser {
     private static final Pattern LOG_PATTERN = Pattern.compile(
-        "(?<adr>[\\d.]*) - .* \\[(?<time>.*)] \"[^ ]* "
+        "(?<adr>[\\S.:]*) - .* \\[(?<time>.*)] \"[^ ]* "
             + "(?<reqRes>[^ ]*) [^\"]*\" (?<respCode>\\d*) "
             + "(?<size>\\d*) \".*\" \"(?<agent>[^\"]*)\"");
     private static final String TIME_FORMAT = "dd'/'MMM/yyyy:HH:mm:ss Z";

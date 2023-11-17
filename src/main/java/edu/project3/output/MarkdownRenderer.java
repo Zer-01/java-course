@@ -75,7 +75,7 @@ public class MarkdownRenderer implements StatRenderer {
 
     private String userAgentTable() {
         StringBuilder result = new StringBuilder();
-        result.append("\n#### Пользовательский агент\n\n")
+        result.append("\n#### User agent\n\n")
             .append("|   Агент    | Количество |\n")
             .append("|:----------:|-----------:|\n");
         for (var agents : report.userAgentCount()) {

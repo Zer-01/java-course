@@ -14,11 +14,12 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LogsSourcesParser {
+    private final static String TXT_FILE_EXTENSION = ".txt";
+
     private LogsSourcesParser() {
     }
 
@@ -35,7 +36,7 @@ public class LogsSourcesParser {
         int lastParentIndex = getEndOfFileParent(pathStr);
         String globPattern = "glob:**/"
             + pathStr.substring(lastParentIndex + 1).replaceAll("\\\\", "/")
-            + (pathStr.contains(".txt") ? "" : ".txt");
+            + (pathStr.contains(TXT_FILE_EXTENSION) ? "" : TXT_FILE_EXTENSION);
 
         PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher(globPattern);
         Path pathParent = Path.of(pathStr.substring(0, lastParentIndex + 1));
@@ -63,7 +64,6 @@ public class LogsSourcesParser {
             request = HttpRequest.newBuilder()
                 .uri(new URI(link))
                 .GET()
-                .timeout(Duration.ofSeconds(10))
                 .build();
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid link", e);

@@ -6,11 +6,11 @@ import edu.project3.arguments.ArgumentContainer;
 import edu.project3.arguments.ArgumentParser;
 import edu.project3.logsParse.LogsSourcesParser;
 import edu.project3.output.Printer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Main {
     private final static Logger LOGGER = LogManager.getLogger();
@@ -39,7 +39,7 @@ public class Main {
             printer = new Printer(report);
             path = path.getParent().resolve("logReport.adoc");
             printer.printToFile(path);
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.error(e);
         }
     }

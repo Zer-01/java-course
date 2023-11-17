@@ -19,7 +19,7 @@ public class Printer {
         render();
     }
 
-    public void printToCli() {
+    public void printToTerminal() {
         LOGGER.info(output);
     }
 

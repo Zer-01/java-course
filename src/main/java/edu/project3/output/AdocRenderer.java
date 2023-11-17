@@ -79,7 +79,7 @@ public class AdocRenderer implements StatRenderer {
 
     private String userAgentTable() {
         StringBuilder result = new StringBuilder();
-        result.append("\n\nПользовательский агент\n")
+        result.append("\n\nUser agent\n")
             .append("|===\n")
             .append("|Агент|Количество\n");
         for (var agents : report.userAgentCount()) {

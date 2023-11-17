@@ -1,12 +1,15 @@
 package edu.project3.arguments;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class ArgumentParser {
+    private final static LocalTime END_OF_DAY = LocalTime.of(23, 59, 59);
+
     private ArgumentParser() {
     }
 
@@ -29,7 +32,7 @@ public class ArgumentParser {
                     from = tryParseDate(args[i + 1]).atStartOfDay().atOffset(ZoneOffset.UTC);
                     break;
                 case "--to":
-                    to = tryParseDate(args[i + 1]).atTime(23, 59, 59).atOffset(ZoneOffset.UTC);
+                    to = tryParseDate(args[i + 1]).atTime(END_OF_DAY).atOffset(ZoneOffset.UTC);
                     break;
                 case "--format":
                     format = tryParseFormat(args[i + 1]);

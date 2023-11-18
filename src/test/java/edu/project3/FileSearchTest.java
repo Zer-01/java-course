@@ -17,8 +17,8 @@ public class FileSearchTest {
 
     @BeforeAll
     public static void init() throws IOException {                //  tmpDir
-        Path testDir1 = tmpDir.resolve("TestDir1");         //  |-testDir1
-        Path testDir2 = tmpDir.resolve("TestDir2");         //  |  |-testFile1.txt
+        Path testDir1 = tmpDir.resolve("testDir1");         //  |-testDir1
+        Path testDir2 = tmpDir.resolve("testDir2");         //  |  |-testFile1.txt
         Files.createDirectory(testDir1);                          //  |-testDir2
         Files.createDirectory(testDir2);                          //  |  |-testFile2.txt
         Files.createFile(tmpDir.resolve("testFile0.txt"));  //  |-testFile0.txt

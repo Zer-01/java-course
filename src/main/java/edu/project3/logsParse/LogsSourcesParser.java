@@ -93,6 +93,7 @@ public class LogsSourcesParser {
         if (firstAsterPos == -1) {
             firstAsterPos = pathStr.length() - 1;
         }
-        return pathStr.lastIndexOf('\\', firstAsterPos);
+        int lastIndex = pathStr.lastIndexOf('\\', firstAsterPos);
+        return (lastIndex == -1) ? pathStr.lastIndexOf('/', firstAsterPos) : lastIndex;
     }
 }

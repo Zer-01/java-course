@@ -1,12 +1,15 @@
 package edu.project3.logsParse;
 
 import edu.project3.arguments.ArgumentContainer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -59,32 +62,30 @@ public class LogsSourcesParser {
     }
 
     private static List<Path> parseLink(String link) {
-        HttpRequest request;
-        try {
-            request = HttpRequest.newBuilder()
-                .uri(new URI(link))
-                .GET()
-                .build();
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("Invalid link", e);
-        }
-
-        String stringResponse;
-        try {
-            var response = HttpClient.newHttpClient()
-                .send(request, HttpResponse.BodyHandlers.ofString());
-            stringResponse = response.body();
-        } catch (IOException | InterruptedException e) {
-            throw new IllegalArgumentException("Invalid link or bad connection", e);
-        }
-
+        HttpURLConnection connection;
         Path tmpFile;
         try {
+            URI uri = new URI(link);
+            URL url = uri.toURL();
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
             tmpFile = Files.createTempFile("Logs", null);
-            Files.writeString(tmpFile, stringResponse);
-        } catch (IOException e) {
-            throw new RuntimeException("Creating temp file error", e);
+        } catch (URISyntaxException | IOException e) {
+            throw new IllegalArgumentException(e);
         }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tmpFile.toString()))) {
+            String line = reader.readLine();
+            while (line != null) {
+                writer.write(line);
+                writer.newLine();
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+
         return List.of(tmpFile);
     }
 

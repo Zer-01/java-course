@@ -2,6 +2,7 @@ package edu.project3;
 
 import edu.project3.arguments.ArgumentContainer;
 import edu.project3.logsParse.LogsSourcesParser;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileSearchTest {
     static @TempDir Path tmpDir;
-    static char delim;
 
     @BeforeAll
     public static void init() throws IOException {                //  tmpDir
@@ -24,8 +24,6 @@ public class FileSearchTest {
         Files.createFile(tmpDir.resolve("testFile0.txt"));  //  |-testFile0.txt
         Files.createFile(testDir1.resolve("testFile1.txt"));//
         Files.createFile(testDir2.resolve("testFile2.txt"));//
-
-        delim = System.getProperty("os.name").contains("Windows") ? '\\' : '/';
     }
 
     @Test
@@ -95,7 +93,7 @@ public class FileSearchTest {
         StringBuilder builder = new StringBuilder();
         builder.append(dir.toString());
         for (String str : strings) {
-            builder.append(delim).append(str);
+            builder.append(File.separator).append(str);
         }
         return builder.toString();
     }

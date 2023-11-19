@@ -3,6 +3,7 @@ package edu.project3.logsParse;
 import edu.project3.arguments.ArgumentContainer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -94,7 +95,7 @@ public class LogsSourcesParser {
         if (firstAsterPos == -1) {
             firstAsterPos = pathStr.length() - 1;
         }
-        int lastIndex = pathStr.lastIndexOf('\\', firstAsterPos);
-        return (lastIndex == -1) ? pathStr.lastIndexOf('/', firstAsterPos) : lastIndex;
+
+        return pathStr.lastIndexOf(File.separator, firstAsterPos);
     }
 }

@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
 public class DiskMap implements Map<String, String> {
+    private static final String KEY_VALUE_SEPARATOR = ":";
     private final String path;
     private Map<String, String> inMemMap;
 
@@ -27,7 +28,7 @@ public class DiskMap implements Map<String, String> {
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             newMap = br.lines()
-                .map(line -> line.split(":"))
+                .map(line -> line.split(KEY_VALUE_SEPARATOR))
                 .collect(Collectors.toMap(
                     arr -> arr[0],
                     arr -> arr[1]
@@ -41,7 +42,7 @@ public class DiskMap implements Map<String, String> {
     public void saveToFile() {
         try (BufferedWriter br = new BufferedWriter(new FileWriter(path))) {
             for (var entry : inMemMap.entrySet()) {
-                br.write(entry.getKey() + ':' + entry.getValue());
+                br.write(entry.getKey() + KEY_VALUE_SEPARATOR + entry.getValue());
                 br.newLine();
             }
         } catch (IOException e) {

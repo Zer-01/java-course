@@ -10,14 +10,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HackerNews {
-    private HackerNews() {
+    private final HttpClient httpClient;
+    private final static String TOP_STORIES_LINK = "https://hacker-news.firebaseio.com/v0/topstories.json";
+    private final static String NEWS_LINK_TEMPLATE = "https://hacker-news.firebaseio.com/v0/item/%d.json";
+
+    public HackerNews() {
+        httpClient = HttpClient.newHttpClient();
     }
 
-    public static long[] hackerNewsTopStories() {
+    public HackerNews(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+
+    public long[] hackerNewsTopStories() {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                .uri(new URI("https://hacker-news.firebaseio.com/v0/topstories.json"))
+                .uri(new URI(TOP_STORIES_LINK))
                 .GET()
                 .build();
         } catch (URISyntaxException e) {
@@ -25,7 +34,7 @@ public class HackerNews {
         }
         String stringResponse;
         try {
-            var response = HttpClient.newHttpClient()
+            var response = httpClient
                 .send(request, HttpResponse.BodyHandlers.ofString());
             stringResponse = response.body();
         } catch (IOException | InterruptedException e) {
@@ -42,11 +51,11 @@ public class HackerNews {
         return result;
     }
 
-    public static String news(long id) {
+    public String news(long id) {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                .uri(new URI("https://hacker-news.firebaseio.com/v0/item/" + id + ".json"))
+                .uri(new URI(NEWS_LINK_TEMPLATE.formatted(id)))
                 .GET()
                 .build();
         } catch (URISyntaxException e) {
@@ -55,7 +64,7 @@ public class HackerNews {
 
         String stringResponse;
         try {
-            var response = HttpClient.newHttpClient()
+            var response = httpClient
                 .send(request, HttpResponse.BodyHandlers.ofString());
             stringResponse = response.body();
         } catch (IOException | InterruptedException e) {

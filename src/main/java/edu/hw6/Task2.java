@@ -6,13 +6,15 @@ import java.nio.file.Path;
 import org.apache.logging.log4j.LogManager;
 
 public class Task2 {
+    private static final char FILE_NAME_SEPARATOR = '.';
+
     private Task2() {
     }
 
     public static void cloneFile(Path path) {
         String fileName = path.getFileName().toString();
-        String prefix = fileName.substring(0, fileName.lastIndexOf('.'));
-        String suffix = fileName.substring(fileName.lastIndexOf('.'));
+        String prefix = fileName.substring(0, fileName.lastIndexOf(FILE_NAME_SEPARATOR));
+        String suffix = fileName.substring(fileName.lastIndexOf(FILE_NAME_SEPARATOR));
 
         int copyNumber = 1;
         Path copyPath = path.resolveSibling(prefix + " — копия" + suffix);

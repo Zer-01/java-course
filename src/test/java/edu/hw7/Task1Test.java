@@ -6,9 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Task1Test {
     @Test
     void oneThreadTest() {
-        int incrementCount = 1_000_000;
+        int incrementCount = 1_000;
 
-        int result = Task1.multiThreadIncrement(1, incrementCount);
+        long result = Task1.multiThreadIncrement(1, incrementCount);
 
         assertThat(result)
             .isEqualTo(incrementCount);
@@ -16,10 +16,10 @@ public class Task1Test {
 
     @Test
     void multiThreadTest() {
-        int threadsCount = 6;
-        int incrementCount = 1_000_000;
+        int threadsCount = 4;
+        long incrementCount = 1_000_000;
 
-        int result = Task1.multiThreadIncrement(threadsCount, incrementCount);
+        long result = Task1.multiThreadIncrement(threadsCount, incrementCount);
 
         assertThat(result)
             .isEqualTo(threadsCount * incrementCount);

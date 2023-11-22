@@ -1,20 +1,16 @@
 package edu.hw7;
 
-import edu.hw2.Task2.Rectangle;
-import edu.hw2.Task2.Square;
 import edu.hw7.Task3.Person;
 import edu.hw7.Task3.PersonDatabase;
 import edu.hw7.Task3.RWLockDatabase;
 import edu.hw7.Task3.SyncDatabase;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Task3Test {
@@ -23,7 +19,7 @@ public class Task3Test {
     AtomicInteger errorsCount = new AtomicInteger();
 
     static Arguments[] databases() {
-        return new Arguments[]{
+        return new Arguments[] {
             Arguments.of(new RWLockDatabase()),
             Arguments.of(new SyncDatabase())
         };
@@ -33,9 +29,9 @@ public class Task3Test {
     @MethodSource("databases")
     void multiThreadTest(PersonDatabase database) throws InterruptedException {
         List<Person> list = personListGenerator();
-        Thread[] readers = new Thread[2];
+        Thread[] readers = new Thread[4];
 
-        for (int thr = 0; thr < 2; thr++) {
+        for (int thr = 0; thr < 4; thr++) {
             readers[thr] = new Thread(() -> {
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 Person tmp = list.get(0);
@@ -61,13 +57,15 @@ public class Task3Test {
             isFinished = true;
         });
 
-        readers[0].start();
-        readers[1].start();
+        for (int thr = 0; thr < 4; thr++) {
+            readers[thr].start();
+        }
         writer.start();
 
         writer.join();
-        readers[0].join();
-        readers[1].join();
+        for (int thr = 0; thr < 4; thr++) {
+            readers[thr].join();
+        }
 
         assertThat(errorsCount.get())
             .isZero();

@@ -20,7 +20,6 @@ public class Task4Test {
 
     @Test
     void multiThreadTest() {
-        int threadsCount = 8;
         long pointsCount1 = 10_000;
         long pointsCount2 = 100_000_000;
 

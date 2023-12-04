@@ -48,7 +48,6 @@ public class Task3Test {
         }
 
         Thread writer = new Thread(() -> {
-            ThreadLocalRandom random = ThreadLocalRandom.current();
             Person tmp = list.get(0);
             for (int i = 1; i < PERSON_LIST_SIZE; i++) {
                 database.add(tmp);

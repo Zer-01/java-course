@@ -16,7 +16,7 @@ public class StatsCollector {
     private final BlockingQueue<RawMetric> rawMetricQueue;
     private final List<Metric> resultList;
     private ExecutorService executorService;
-    private boolean inProgress;
+    private volatile boolean inProgress;
     private final ReadWriteLock readWriteLock;
 
     public StatsCollector() {

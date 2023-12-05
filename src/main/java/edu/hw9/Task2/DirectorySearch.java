@@ -18,7 +18,7 @@ public class DirectorySearch extends RecursiveTask<List<Path>> {
     }
 
     @Override
-    public List<Path> compute() {
+    protected List<Path> compute() {
         try {
             if (Files.isDirectory(directory)) {
                 List<DirectorySearch> subtasks =

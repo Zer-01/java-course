@@ -23,8 +23,9 @@ public class Task1Test {
         for (int i = 0; i < generatorThreadsCount; i++) {
             threads[i] = new Thread(() -> {
                 ThreadLocalRandom random = ThreadLocalRandom.current();
+                long counter = 0;
                 while (inProgress) {
-                    collector.push(String.valueOf(random.nextInt()), random.doubles(10).toArray());
+                    collector.push(String.valueOf(counter++), random.doubles(10).toArray());
                 }
             });
             threads[i].start();
@@ -32,14 +33,15 @@ public class Task1Test {
         inProgress = true;
         collector.start(4);
 
-        Thread.sleep(1000);
+        Thread.sleep(750);
         collector.push(testInStr, testArr);
-        Thread.sleep(1000);
+        Thread.sleep(750);
 
         inProgress = false;
         for (int i = 0; i < generatorThreadsCount; i++) {
             threads[i].join();
         }
+        Thread.sleep(500);
         collector.stop();
 
         assertThat(collector.stats())

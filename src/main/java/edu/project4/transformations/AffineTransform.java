@@ -28,11 +28,11 @@ public record AffineTransform(
     public static AffineTransform randAffine(Random rand) {
         return new AffineTransform(
             rand.nextDouble(MIN_AFFINE, MAX_AFFINE),
-            rand.nextDouble(MAX_AFFINE, MAX_AFFINE),
-            rand.nextDouble(MAX_AFFINE, MAX_AFFINE),
-            rand.nextDouble(MAX_AFFINE, MAX_AFFINE),
-            rand.nextDouble(MAX_AFFINE, MAX_AFFINE),
-            rand.nextDouble(MAX_AFFINE, MAX_AFFINE),
+            rand.nextDouble(MIN_AFFINE, MAX_AFFINE),
+            rand.nextDouble(MIN_AFFINE, MAX_AFFINE),
+            rand.nextDouble(MIN_AFFINE, MAX_AFFINE),
+            rand.nextDouble(MIN_AFFINE, MAX_AFFINE),
+            rand.nextDouble(MIN_AFFINE, MAX_AFFINE),
             rand.nextInt(MIN_COLOUR_NUM, MAX_COLOUR_NUM),
             rand.nextInt(MIN_COLOUR_NUM, MAX_COLOUR_NUM),
             rand.nextInt(MIN_COLOUR_NUM, MAX_COLOUR_NUM)

@@ -7,6 +7,7 @@ import edu.project4.transformations.AffineTransform;
 import edu.project4.transformations.Transformation;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SingleThreadRenderer implements Renderer {
     private static final int START_STEPS = 20;
@@ -21,7 +22,7 @@ public class SingleThreadRenderer implements Renderer {
         List<Transformation> transforms
     ) {
 
-        Random random = new Random();
+        Random random = ThreadLocalRandom.current();
         AffineTransform[] affine = AffineTransform.randAffineArray(transforms.size(), random);
         int affineNumber = 0;
         for (int num = 0; num < samples; num++) {

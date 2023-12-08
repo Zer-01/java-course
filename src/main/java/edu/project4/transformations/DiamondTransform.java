@@ -1,6 +1,6 @@
 package edu.project4.transformations;
 
-import edu.project4.Point;
+import edu.project4.containers.Point;
 
 public class DiamondTransform implements Transformation {
     @Override

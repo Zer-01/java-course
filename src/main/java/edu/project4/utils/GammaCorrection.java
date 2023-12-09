@@ -1,4 +1,4 @@
-package edu.project4;
+package edu.project4.utils;
 
 import edu.project4.containers.FractalImage;
 import edu.project4.containers.Pixel;

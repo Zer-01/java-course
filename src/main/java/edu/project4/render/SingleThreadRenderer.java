@@ -23,14 +23,12 @@ public class SingleThreadRenderer implements Renderer {
     ) {
 
         Random random = ThreadLocalRandom.current();
-        AffineTransform[] affine = AffineTransform.randAffineArray(transforms.size(), random);
-        int affineNumber = 0;
+        AffineTransform iterationAffine = AffineTransform.randAffine(random);
         for (int num = 0; num < samples; num++) {
             Point randPoint = world.randPoint(random);
+
             for (int it = -START_STEPS; it < iterPerSample; it++) {
                 Transformation transformation = transforms.get(random.nextInt(0, transforms.size()));
-                AffineTransform iterationAffine = affine[affineNumber];
-                affineNumber = (affineNumber + 1) % transforms.size();
 
                 Point newPoint = transformation.apply(iterationAffine.apply(randPoint));
                 if (it > 0) {

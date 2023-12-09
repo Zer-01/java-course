@@ -4,6 +4,9 @@ import edu.project4.transformations.AffineTransform;
 
 public record FractalImage(Pixel[][] data, int width, int height) {
     public static FractalImage create(int width, int height) {
+        if (width < 1 || height < 1) {
+            throw new IllegalArgumentException();
+        }
         Pixel[][] pixels = new Pixel[height][width];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -13,25 +16,21 @@ public record FractalImage(Pixel[][] data, int width, int height) {
         return new FractalImage(pixels, width, height);
     }
 
-    public Pixel pixel(int x, int y) {
+    public Pixel pixel(int y, int x) {
         return data[y][x];
     }
 
-    public void setPixel(int x, int y, Pixel pixel) {
+    public void setPixel(int y, int x, Pixel pixel) {
         data[y][x] = pixel;
-    }
-
-    public boolean contain(int x, int y) {
-        return x >= 0 && x <= width && y >= 0 && y <= height;
     }
 
     public void updateIfInRange(int x, int y, AffineTransform transform) {
         int r;
         int g;
         int b;
-        if(x<width&&y<height) {
-            Pixel pixel = data[y][x];
-            synchronized (pixel) {
+        if (x < width && y < height) {
+            synchronized (data[y][x]) {
+                Pixel pixel = data[y][x];
                 if (pixel.hitCount() == 0) {
                     r = transform.rCol();
                     g = transform.gCol();

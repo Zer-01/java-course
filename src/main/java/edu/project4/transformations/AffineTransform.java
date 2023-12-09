@@ -16,7 +16,7 @@ public record AffineTransform(
 ) {
     private static final double MIN_AFFINE = -1;
     private static final double MAX_AFFINE = 1;
-    private static final int MIN_COLOUR_NUM = 64;
+    private static final int MIN_COLOUR_NUM = 0/*64*/;
     private static final int MAX_COLOUR_NUM = 256;
 
     public Point apply(Point point) {
@@ -39,11 +39,4 @@ public record AffineTransform(
         );
     }
 
-    public static AffineTransform[] randAffineArray(int size, Random rand) {
-        AffineTransform[] result = new AffineTransform[size];
-        for (int i = 0; i < size; i++) {
-            result[i] = randAffine(rand);
-        }
-        return result;
-    }
 }

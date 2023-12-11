@@ -41,6 +41,7 @@ public class RandomObjectGenerator {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T nextObject(Class<T> tClass) {
         try {
             Constructor<T>[] constructors = (Constructor<T>[]) tClass.getDeclaredConstructors();

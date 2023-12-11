@@ -85,6 +85,7 @@ public class CacheProxy implements InvocationHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void loadCache() throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path.toString()))) {
             if (ois.available() > 0) {

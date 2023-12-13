@@ -1,6 +1,6 @@
 package edu.hw11.Task2;
 
-public class ArithmeticUtils {
+class ArithmeticUtils {
     private ArithmeticUtils() {
     }
 

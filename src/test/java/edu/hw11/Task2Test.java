@@ -17,7 +17,7 @@ public class Task2Test {
 
         int result1 = ArithmeticUtils.sum(var1, var2);
 
-        Task.redefine(ArithmeticUtils.class, "sum", DelegationClass.class);
+        Task.redefine(ArithmeticUtils.class, DelegationClass.class);
 
         int result2 = ArithmeticUtils.sum(var1, var2);
 
@@ -30,6 +30,6 @@ public class Task2Test {
     @Test
     void nullInput() {
         assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> Task.redefine(null, null, null));
+            .isThrownBy(() -> Task.redefine(null, null));
     }
 }

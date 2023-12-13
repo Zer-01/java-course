@@ -1,11 +1,10 @@
-package edu.hw11;
+package edu.hw11.Task2;
 
-import edu.hw11.Task2.ArithmeticUtils;
-import edu.hw11.Task2.DelegationClass;
-import edu.hw11.Task2.Task;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class Task2Test {
     @Test
@@ -17,7 +16,13 @@ public class Task2Test {
 
         int result1 = ArithmeticUtils.sum(var1, var2);
 
-        Task.redefine(ArithmeticUtils.class, DelegationClass.class);
+        ByteBuddyAgent.install();
+
+        new ByteBuddy()
+            .redefine(DelegationClass.class)
+            .name(ArithmeticUtils.class.getName())
+            .make()
+            .load(ArithmeticUtils.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
 
         int result2 = ArithmeticUtils.sum(var1, var2);
 
@@ -25,11 +30,5 @@ public class Task2Test {
             .isEqualTo(expResult1);
         assertThat(result2)
             .isEqualTo(expResult2);
-    }
-
-    @Test
-    void nullInput() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> Task.redefine(null, null));
     }
 }

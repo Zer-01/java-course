@@ -3,32 +3,23 @@ package edu.hw11.Task2;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task2Test {
+
     @Test
-    void changeMethod() {
-        int var1 = 2;
-        int var2 = 3;
-        int expResult1 = 5;
-        int expResult2 = 6;
-
-        int result1 = ArithmeticUtils.sum(var1, var2);
-
+    public void sum_shouldMultiply() {
+        int x = 5;
+        int y = 5;
         ByteBuddyAgent.install();
-
         new ByteBuddy()
-            .redefine(DelegationClass.class)
+            .redefine(ArithmeticUtilsOverride.class)
             .name(ArithmeticUtils.class.getName())
             .make()
             .load(ArithmeticUtils.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
 
-        int result2 = ArithmeticUtils.sum(var1, var2);
-
-        assertThat(result1)
-            .isEqualTo(expResult1);
-        assertThat(result2)
-            .isEqualTo(expResult2);
+        assertThat(ArithmeticUtils.sum(x, y)).isEqualTo(x * y);
     }
 }

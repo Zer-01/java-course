@@ -3,8 +3,9 @@ package edu.hw11.Task2;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static net.bytebuddy.implementation.MethodDelegation.to;
+import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class Task2Test {
@@ -15,10 +16,14 @@ public class Task2Test {
         int y = 5;
         ByteBuddyAgent.install();
         new ByteBuddy()
-            .redefine(ArithmeticUtilsOverride.class)
-            .name(ArithmeticUtils.class.getName())
+            .redefine(ArithmeticUtils.class)
+            .method(named("sum"))
+            .intercept(to(ArithmeticUtilsOverride.class))
             .make()
-            .load(ArithmeticUtils.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
+            .load(
+                ArithmeticUtils.class.getClassLoader(),
+                ClassReloadingStrategy.fromInstalledAgent()
+            );
 
         assertThat(ArithmeticUtils.sum(x, y)).isEqualTo(x * y);
     }

@@ -22,12 +22,14 @@ import org.openjdk.jmh.runner.options.TimeValue;
 @State(Scope.Thread)
 public class ReflectionBenchmark {
     private static final int WARMUP_TIME_SECONDS = 5;
-    private static final int MEASUREMENT_TIME_SECONDS = 5;
+    private static final int MEASUREMENT_TIME_SECONDS = 15;
+    private static final String TESTING_METHOD_NAME = "name";
     private Student student;
     private Method getNameMethod;
     private MethodHandle methodHandle;
     private NameGetter lambda;
 
+    @SuppressWarnings("UncommentedMain")
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
             .include(ReflectionBenchmark.class.getSimpleName())
@@ -49,15 +51,15 @@ public class ReflectionBenchmark {
     public void setup() throws Throwable {
         student = new Student("FirstName", "LastName");
 
-        getNameMethod = Student.class.getMethod("name");
+        getNameMethod = Student.class.getMethod(TESTING_METHOD_NAME);
 
         MethodHandles.Lookup lookup = MethodHandles.lookup();
-        methodHandle = lookup.findVirtual(Student.class, "name", MethodType.methodType(String.class));
+        methodHandle = lookup.findVirtual(Student.class, TESTING_METHOD_NAME, MethodType.methodType(String.class));
 
         lookup = MethodHandles.lookup();
         MethodType methodType = MethodType.methodType(String.class, Student.class);
         MethodHandle getNameMethodHandle =
-            lookup.findVirtual(Student.class, "name", MethodType.methodType(String.class));
+            lookup.findVirtual(Student.class, TESTING_METHOD_NAME, MethodType.methodType(String.class));
         lambda = (NameGetter) LambdaMetafactory.metafactory(
             lookup,
             "get",

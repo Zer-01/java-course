@@ -14,12 +14,13 @@ public class Task2Test {
         int var2 = 3;
         int expResult1 = 5;
         int expResult2 = 6;
+        ArithmeticUtils utils = new ArithmeticUtils();
 
-        int result1 = ArithmeticUtils.sum(var1, var2);
+        int result1 = utils.sum(var1, var2);
 
         Task.redefine(ArithmeticUtils.class, "sum", DelegationClass.class);
 
-        int result2 = ArithmeticUtils.sum(var1, var2);
+        int result2 = utils.sum(var1, var2);
 
         assertThat(result1)
             .isEqualTo(expResult1);

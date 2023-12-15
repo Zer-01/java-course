@@ -3,8 +3,6 @@ package edu.hw11.Task2;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
-import static net.bytebuddy.implementation.MethodDelegation.to;
-import static net.bytebuddy.matcher.ElementMatchers.named;
 
 public class Task {
     private Task() {
@@ -18,9 +16,8 @@ public class Task {
         ByteBuddyAgent.install();
 
         new ByteBuddy()
-            .redefine(originalClass)
-            .method(named(methodName))
-            .intercept(to(delegation))
+            .redefine(DelegationClass.class)
+            .name(ArithmeticUtils.class.getName())
             .make()
             .load(ArithmeticUtils.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
     }

@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -16,8 +17,8 @@ import org.apache.logging.log4j.Logger;
 public class MTPasswordCracker {
     private final static Logger LOGGER = LogManager.getLogger();
     private final static int WAIT_TERMINATE_TIMEOUT = 100;
-    private final Map<String, String> foundPasswords;
-    private final Map<String, String> baseMap;
+    private final ConcurrentMap<String, String> foundPasswords;
+    private final ConcurrentMap<String, String> baseMap;
     private final int passwordSize;
 
     public MTPasswordCracker(int passSize, Path path) {

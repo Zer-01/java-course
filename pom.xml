@@ -45,6 +45,9 @@
 
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
 
+        <bytebuddy.version>1.14.10</bytebuddy.version>
+        <asm.version>9.6</asm.version>
+
         <jmh.version>1.37</jmh.version>
     </properties>
 
@@ -103,6 +106,23 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+            <version>${bytebuddy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${bytebuddy.version}</version>
+        </dependency>
+
         <!-- JMH -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
@@ -131,6 +151,11 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>edu/hw11/Task2/ArithmeticUtils*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
